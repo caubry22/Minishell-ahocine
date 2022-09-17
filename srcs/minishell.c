@@ -14,24 +14,51 @@
 
 int	g_signal;
 
-static int	ft_check_quote(char *str, char sep)
+int	ft_check_quote(char *str)
 {
-	int	count;
+	int quote;
 	int	i;
 
+	quote = 0;
 	i = 0;
-	count = 0;
-	if (!str)
-		return (0);
 	while (str[i])
 	{
-		if (str[i] == sep)
-			if (!i || (i && str[i - 1] != '\\'))
-				count++;
-		i++;
+		if (ft_strrchr("'\"", str[i]))
+		{
+			quote = (int)str[i];
+			i++;
+			while (str[i] != (char)quote && str[i])
+				i++;
+			if (str[i])
+			{
+				quote = 0;
+				i++;
+			}
+		}
+		else
+			i++;
 	}
-	return (count);
+	return (quote);
 }
+
+// static int	ft_check_quote(char *str, char sep)
+// {
+// 	int	count;
+// 	int	i;
+
+// 	i = 0;
+// 	count = 0;
+// 	if (!str)
+// 		return (0);
+// 	while (str[i])
+// 	{
+// 		if (str[i] == sep)
+// 			if (!i || (i && str[i - 1] != '\\'))
+// 				count++;
+// 		i++;
+// 	}
+// 	return (count);
+// }
 
 void	stop_cmd(int sig)
 {
@@ -51,20 +78,19 @@ void	stop_cmd(int sig)
 	}
 }
 
-static int	check_line(char *str)
-{
-	char	simple_quote;
-	char	double_quote;
+// static int	check_line(char *str)
+// {
+// 	char	simple_quote;
+// 	char	double_quote;
 
-	simple_quote = '\'';
-	double_quote = '\"';
-	if (!str)
-		return (0);
-	if (!(ft_check_quote(str, simple_quote) % 2) || \
-	!(ft_check_quote(str, double_quote) % 2))
-		return (0);
-	return (1);
-}
+// 	simple_quote = '\'';
+// 	double_quote = '"';
+// 	if (!str)
+// 		return (0);
+// 	if (!(ft_check_quote(str, simple_quote) % 2) || \ !(ft_check_quote(str, double_quote) % 2))
+// 		return (0);
+// 	return (1);
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -85,7 +111,8 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGQUIT, SIG_IGN);
 		if (!line)
 			return (ft_empty_trash(), 1);
-		if (check_line(line))
+		if (ft_check_quote(line))
+			// Revoir le comportement si les guillemets ne sont pas fermes, un peu style heredocs ???
 			free(line);
 		else
 			ft_main_parser(line);

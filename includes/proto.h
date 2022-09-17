@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   proto.h                                            :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caubry <caubry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ahocine <ahocine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 02:19:40 by ahocine           #+#    #+#             */
-/*   Updated: 2022/09/16 19:50:35 by caubry           ###   ########.fr       */
+/*   Updated: 2022/07/22 02:19:42 by ahocine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@
 
 extern int	g_signal;
 
-/////////////////////////////////////////////////////////
-//                   PARSEUR - LEXER                   //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+//                   PARSEUR - LEXER                  //
+////////////////////////////////////////////////////////
 
 /* <infile cp -r < ../../includes $DISPLAY|grep "cat \"echo\"">>outfile */
 char		*ft_heredoc(t_lexer *lexer, char *line);
 t_lexer		**ft_split_cmds(t_lexer **lexer);
 int			ft_is_strexpend(char *split);
-void		ft_close_fds(void);
 void		ft_main_parser(char *line);
 void		ft_unlink_heredoc(void);
+void		ft_close_fds(void);
 
 /*		PARSE_TYPE		*/
 void		ft_is_redirect(t_lexer **lexer, char *str, int *index_of_line);
@@ -58,15 +58,16 @@ char		*ft_get_path(char *command_to_find);
 /*		  UTILS  		*/
 void		ft_skip_redir(char *str, int *index);
 void		ft_skip_word(char *str, int *index);
+void		ft_match_quote(char *str, int *i);
 int			ft_first_string(t_lexer *lexer);
 int			ft_count_pipes(t_lexer *lexer);
+char		*ft_del_quote(char *str);
 void		signal_cmd_2(int sig);
-int			ft_dont_skip(char c);
 void		stop_cmd(int signal);
 
-/////////////////////////////////////////////////////////
-//                     BUILDS - IN                     //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+//                     BUILDS - IN                    //
+////////////////////////////////////////////////////////
 
 void		ft_export(t_lexer *lexer);
 void		ft_unset(t_lexer *lexer);
@@ -76,29 +77,32 @@ void		ft_env(t_lexer *lexer);
 void		ft_pwd(t_lexer *lexer);
 void		ft_cd(t_lexer *lexer);
 
-/////////////////////////////////////////////////////////
-//                    TOOLS - UTILS                    //
-/////////////////////////////////////////////////////////
-
+////////////////////////////////////////////////////////
+//                    TOOLS - UTILS                   //
+////////////////////////////////////////////////////////
+/*      redir      */
 t_type		ft_find_redir(char *str, int i);
 void		ft_skip_redir(char *s, int *i);
+
 /*      trash      */
 int			ft_add_trash(void *to_free);
 t_garbage	**ft_get_trash(void);
 void		ft_empty_trash(void);
 int			ft_init_trash(void);
+
 /*       env      */
 char		*ft_build_path(t_env *env, char *cmd, int start, int end);
 void		ft_add_new_env(char *env_name, char *new_value);
+t_env		*ft_find_env(char *env_to_find);
 int			ft_init_t_env(char **env);
 void		ft_clean_env_list(void);
 t_env		**ft_get_env(void);
 
 int			max(int a, int b);
 
-/////////////////////////////////////////////////////////
-//                     EXEC - PART                     //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+//                     EXEC - PART                    //
+////////////////////////////////////////////////////////
 
 int			ft_fork_and_exec_builtin(t_lexer *cmd, int function_index);
 char		**get_block_cmd(t_lexer *start, int nb_cmd);
@@ -115,6 +119,6 @@ int			count_pipe(t_lexer *start);
 int			nb_cmd(t_lexer **blck);
 char		**get_clean_env(void);
 void		free_all(char **tab);
-funcptr		*builtin_tab(void);
+t_funcptr	*builtin_tab(void);
 
 #endif

@@ -66,6 +66,7 @@ static char	*ft_split_cmd(t_lexer *lex, char *line)
 		len++;
 	ft_strlcpy(res, line + lex->index, len);
 	res = ft_strtrim(res, " \t\n\r\v\f");
+	res = ft_del_quote(res);
 	if (!res)
 		return (NULL);
 	if (!ft_add_trash((void *)res))
@@ -117,8 +118,8 @@ t_lexer	*ft_lexer_type(char *s)
 			i++;
 		else if (s[i] && s[i] == '|')
 			ft_is_pipe(&lex, s, &i);
-		else if (s[i] == '\'' || s[i] == '\"')
-			ft_is_quote(&lex, s, &i);
+		// else if (s[i] == '\'' || s[i] == '\"')
+		// 	ft_is_quote(&lex, s, &i);
 		else
 			ft_is_str(&lex, s, &i);
 	}

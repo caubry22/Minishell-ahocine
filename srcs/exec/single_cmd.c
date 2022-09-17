@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caubry <caubry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wmari <wmari@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 00:05:06 by wmari             #+#    #+#             */
-/*   Updated: 2022/09/16 20:04:03 by caubry           ###   ########.fr       */
+/*   Updated: 2022/09/04 05:49:37 by wmari            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_fork_and_exec_builtin(t_lexer *cmd, int function_index)
 {
-	funcptr	*fun_ptr;
+	t_funcptr	*fun_ptr;
 
 	if (!cmd->cmd)
 		return (1);
